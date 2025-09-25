@@ -2,8 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { Hammer, Shield, Star } from 'lucide-react';
-import { useState } from 'react';
+// Removed unused imports
 import NewsletterSignup from '@/components/NewsletterSignup';
 
 export default function Home() {
@@ -116,7 +115,7 @@ export default function Home() {
                   >
                     <div className="text-yellow-400 text-lg mb-1">⭐⭐⭐⭐⭐</div>
                     <p className="text-white/90 italic text-sm">
-                      "Patriots love it."
+                      &ldquo;Patriots love it.&rdquo;
                     </p>
                   </motion.div>
                   
