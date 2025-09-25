@@ -19,6 +19,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Get the base URL for the application
+    const origin = request.headers.get('origin');
+    const host = request.headers.get('host');
+    const baseUrl = origin || (host ? `http://${host}` : 'http://localhost:3002');
+    
+    console.log('Base URL for checkout:', baseUrl);
+
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -29,6 +36,14 @@ export async function POST(request: NextRequest) {
             product_data: {
               name: productName,
               description: `Premium Heritage Steel Tumbler - ${productName}`,
+              images: [
+                `${baseUrl}/images/product-2.jpg`,
+                `${baseUrl}/images/product1.jpg`,
+                `${baseUrl}/images/tumbler-1.png`,
+                `${baseUrl}/images/tumbler-2.png`,
+                `${baseUrl}/images/tumbler-3.png`,
+                `${baseUrl}/images/tumbler-4.png`,
+              ],
             },
             unit_amount: price * 100, // Convert to cents
           },
@@ -36,8 +51,8 @@ export async function POST(request: NextRequest) {
         },
       ],
       mode: 'payment',
-      success_url: `${request.headers.get('origin')}/success`,
-      cancel_url: `${request.headers.get('origin')}/cancel`,
+      success_url: `${baseUrl}/success`,
+      cancel_url: `${baseUrl}/cancel`,
       metadata: {
         productId: productId.toString(),
         productName: productName,

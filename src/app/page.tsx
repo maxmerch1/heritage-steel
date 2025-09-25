@@ -4,33 +4,34 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Hammer, Shield, Star } from 'lucide-react';
 import { useState } from 'react';
+import NewsletterSignup from '@/components/NewsletterSignup';
 
 export default function Home() {
-  // Checkout handler function
-  const handleCheckout = async () => {
+  // Direct checkout handler function
+  const handleCheckout = async (productId: string = 'heritage-classic') => {
     try {
-      console.log('Proceeding to checkout...');
-      
-      // Call the new checkout API
       const response = await fetch('/api/checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          productId: productId,
+        }),
       });
 
+      const data = await response.json();
+      
       if (!response.ok) {
-        throw new Error('Failed to create checkout session');
+        throw new Error(data.error || 'Failed to create checkout session');
       }
 
-      const { url } = await response.json();
-      
       // Redirect to Stripe checkout
-      window.location.href = url;
+      window.location.href = data.url;
       
     } catch (error) {
       console.error('Checkout error:', error);
-      alert('Checkout failed. Please try again.');
+      alert(`Checkout failed: ${error.message}`);
     }
   };
   return (
@@ -129,6 +130,16 @@ export default function Home() {
                   >
                     🔥 Get Yours Now — Only $39
                   </Link>
+                  
+                  {/* Social Proof */}
+                  <motion.p
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.8 }}
+                    className="text-white/80 text-sm mt-4 text-center"
+                  >
+                    Trusted by 5,000+ patriots nationwide.
+                  </motion.p>
                   
                   {/* Trust Badges */}
                   <div className="mt-4 text-center">
@@ -356,7 +367,7 @@ export default function Home() {
                   
                   {/* Buy Now Button */}
                   <button
-                    onClick={handleCheckout}
+                    onClick={() => handleCheckout(product.id === 1 ? '1776-patriot' : 'heritage-classic')}
                     className="w-full mt-4 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
                     style={{ backgroundColor: '#d62828' }}
                   >
@@ -439,6 +450,27 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Newsletter Signup */}
+      <section className="py-16 bg-navy">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-8"
+          >
+            <h2 className="text-3xl font-serif font-bold text-off-white mb-4">
+              Stay Connected to the Heritage
+            </h2>
+            <p className="text-steel text-lg">
+              Get exclusive updates, early access to new drops, and special offers.
+            </p>
+          </motion.div>
+          <NewsletterSignup showIncentive={true} />
+        </div>
+      </section>
       
       {/* Guarantee Strip */}
       <section className="py-12 bg-gray-100">
@@ -465,6 +497,7 @@ export default function Home() {
           </p>
         </div>
       </section>
+
     </div>
   );
 }

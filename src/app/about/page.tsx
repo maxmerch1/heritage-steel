@@ -8,13 +8,11 @@ export default function About() {
     <div className="min-h-screen bg-off-white">
       {/* Hero Banner */}
       <section className="relative h-96 bg-navy flex items-center justify-center overflow-hidden">
+        {/* Lifestyle Background Image */}
+        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{
+          backgroundImage: `url("https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80")`
+        }}></div>
         <div className="absolute inset-0 bg-gradient-to-br from-navy/90 to-navy/70"></div>
-        <div className="absolute inset-0 opacity-20">
-          <div className="w-full h-full" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23C0C0C0' fill-opacity='0.1'%3E%3Cpath d='M20 20.5V18H18v2.5h-2v2h2v2.5h2v-2.5h2v-2h-2zM20 2.5V0H18v2.5h-2v2h2v2.5h2V4.5h2v-2h-2zM2.5 20.5V18H0v2.5H0v2h2.5v2.5h2v-2.5h2v-2H2.5zM2.5 2.5V0H0v2.5H0v2h2.5v2.5h2V4.5h2v-2H2.5z'/%3E%3C/svg%3E")`,
-            backgroundRepeat: 'repeat'
-          }}></div>
-        </div>
         
         <div className="relative z-10 text-center text-off-white px-4 max-w-4xl mx-auto">
           <motion.h1

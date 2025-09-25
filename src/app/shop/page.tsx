@@ -3,33 +3,34 @@
 import { motion } from 'framer-motion';
 import { ShoppingCart, Star } from 'lucide-react';
 import { useState } from 'react';
+import NewsletterSignup from '@/components/NewsletterSignup';
 
 export default function Shop() {
-  // Checkout handler function
-  const handleCheckout = async () => {
+  // Direct checkout handler function
+  const handleCheckout = async (productId: string = 'heritage-classic') => {
     try {
-      console.log('Proceeding to checkout...');
-      
-      // Call the new checkout API
       const response = await fetch('/api/checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          productId: productId,
+        }),
       });
 
+      const data = await response.json();
+      
       if (!response.ok) {
-        throw new Error('Failed to create checkout session');
+        throw new Error(data.error || 'Failed to create checkout session');
       }
 
-      const { url } = await response.json();
-      
       // Redirect to Stripe checkout
-      window.location.href = url;
+      window.location.href = data.url;
       
     } catch (error) {
       console.error('Checkout error:', error);
-      alert('Checkout failed. Please try again.');
+      alert(`Checkout failed: ${error.message}`);
     }
   };
   const products = [
@@ -179,7 +180,7 @@ export default function Shop() {
                   
                   {/* Buy Now Button */}
                   <button
-                    onClick={handleCheckout}
+                    onClick={() => handleCheckout(product.id === 1 ? '1776-patriot' : 'heritage-classic')}
                     className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
                     style={{ backgroundColor: '#d62828' }}
                   >
@@ -190,31 +191,155 @@ export default function Shop() {
             ))}
           </div>
 
-          {/* Coming Soon Section */}
+          {/* Customer Testimonials */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="mt-16"
+          >
+            <h2 className="text-3xl font-serif font-bold text-navy text-center mb-8">
+              What Patriots Are Saying
+            </h2>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="bg-white rounded-lg p-6 shadow-lg border border-gray-100"
+              >
+                <div className="flex items-center mb-4">
+                  <div className="w-10 h-10 bg-crimson rounded-full flex items-center justify-center text-white font-bold">
+                    J
+                  </div>
+                  <div className="ml-3">
+                    <p className="font-semibold text-navy">Jason R.</p>
+                    <p className="text-steel text-sm">Texas</p>
+                  </div>
+                </div>
+                <p className="text-steel italic">
+                  "Feels solid and looks even better in person. Finally a tumbler that matches my values."
+                </p>
+                <div className="flex text-yellow-400 mt-3">
+                  ⭐⭐⭐⭐⭐
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+                className="bg-white rounded-lg p-6 shadow-lg border border-gray-100"
+              >
+                <div className="flex items-center mb-4">
+                  <div className="w-10 h-10 bg-crimson rounded-full flex items-center justify-center text-white font-bold">
+                    M
+                  </div>
+                  <div className="ml-3">
+                    <p className="font-semibold text-navy">Mark D.</p>
+                    <p className="text-steel text-sm">Florida</p>
+                  </div>
+                </div>
+                <p className="text-steel italic">
+                  "Worth every penny. Built like a tank and looks amazing. My daily driver now."
+                </p>
+                <div className="flex text-yellow-400 mt-3">
+                  ⭐⭐⭐⭐⭐
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.6 }}
+                className="bg-white rounded-lg p-6 shadow-lg border border-gray-100"
+              >
+                <div className="flex items-center mb-4">
+                  <div className="w-10 h-10 bg-crimson rounded-full flex items-center justify-center text-white font-bold">
+                    S
+                  </div>
+                  <div className="ml-3">
+                    <p className="font-semibold text-navy">Sarah K.</p>
+                    <p className="text-steel text-sm">California</p>
+                  </div>
+                </div>
+                <p className="text-steel italic">
+                  "Perfect for my morning coffee. Keeps it hot for hours and the design is beautiful."
+                </p>
+                <div className="flex text-yellow-400 mt-3">
+                  ⭐⭐⭐⭐⭐
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.7 }}
+                className="bg-white rounded-lg p-6 shadow-lg border border-gray-100"
+              >
+                <div className="flex items-center mb-4">
+                  <div className="w-10 h-10 bg-crimson rounded-full flex items-center justify-center text-white font-bold">
+                    T
+                  </div>
+                  <div className="ml-3">
+                    <p className="font-semibold text-navy">Tom W.</p>
+                    <p className="text-steel text-sm">Ohio</p>
+                  </div>
+                </div>
+                <p className="text-steel italic">
+                  "Finally found a tumbler that doesn't dent or scratch. Quality is unmatched."
+                </p>
+                <div className="flex text-yellow-400 mt-3">
+                  ⭐⭐⭐⭐⭐
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.8 }}
+                className="bg-white rounded-lg p-6 shadow-lg border border-gray-100"
+              >
+                <div className="flex items-center mb-4">
+                  <div className="w-10 h-10 bg-crimson rounded-full flex items-center justify-center text-white font-bold">
+                    R
+                  </div>
+                  <div className="ml-3">
+                    <p className="font-semibold text-navy">Robert L.</p>
+                    <p className="text-steel text-sm">Arizona</p>
+                  </div>
+                </div>
+                <p className="text-steel italic">
+                  "Love the patriotic design. Gets compliments everywhere I go. Great conversation starter!"
+                </p>
+                <div className="flex text-yellow-400 mt-3">
+                  ⭐⭐⭐⭐⭐
+                </div>
+              </motion.div>
+            </div>
+          </motion.div>
+
+          {/* Newsletter Signup */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-16 text-center"
+            className="mt-16"
           >
-            <div className="bg-navy rounded-lg p-8 text-off-white">
-              <h3 className="text-2xl font-serif font-bold mb-4">
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-serif font-bold text-navy mb-2">
                 More Drops Coming Soon
               </h3>
-              <p className="text-steel mb-6">
-                Join the Patriot's List to be the first to know about new limited drops.
+              <p className="text-steel">
+                Be the first to know about new limited releases
               </p>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-crimson hover:bg-crimson/90 text-off-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-crimson/25"
-              >
-                Join Patriot's List
-              </motion.button>
             </div>
+            <NewsletterSignup showIncentive={true} />
           </motion.div>
         </div>
       </section>
+
     </div>
   );
 }

@@ -27,54 +27,21 @@ export default async function handler(req, res) {
     const session = event.data.object;
     console.log("✅ Payment complete:", session.id);
 
-    try {
-      // Call Printify API to create order
-      const printifyResponse = await fetch(
-        `https://api.printify.com/v1/shops/${process.env.PRINTIFY_SHOP_ID}/orders.json`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${process.env.PRINTIFY_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            external_id: session.id,
-            label: "Heritage Steel Order",
-            line_items: [
-              {
-                product_id: "PRINTIFY_PRODUCT_ID", // Replace with actual Printify product ID
-                variant_id: "PRINTIFY_VARIANT_ID", // Replace with actual Printify variant ID
-                quantity: 1,
-              },
-            ],
-            shipping_method: 1,
-            send_shipping_notification: true,
-            address_to: {
-              first_name: session.shipping_details?.name?.split(' ')[0] || 'Customer',
-              last_name: session.shipping_details?.name?.split(' ').slice(1).join(' ') || '',
-              email: session.customer_details?.email || '',
-              phone: session.shipping_details?.phone || '',
-              country: session.shipping_details?.address?.country_code || 'US',
-              region: session.shipping_details?.address?.state || '',
-              city: session.shipping_details?.address?.city || '',
-              address1: session.shipping_details?.address?.line1 || '',
-              address2: session.shipping_details?.address?.line2 || '',
-              zip: session.shipping_details?.address?.postal_code || '',
-            },
-          }),
-        }
-      );
+    // Extract order information for confirmation
+    const shipping = session.shipping_details;
+    const customer = session.customer_details;
+    const metadata = session.metadata || {};
+    
+    console.log("📦 Order details:", {
+      sessionId: session.id,
+      productName: metadata.productName || 'Heritage Steel Tumbler',
+      customerEmail: customer?.email,
+      shippingName: shipping?.name,
+      shippingAddress: shipping?.address,
+    });
 
-      if (printifyResponse.ok) {
-        const printifyOrder = await printifyResponse.json();
-        console.log("✅ Printify order created:", printifyOrder);
-      } else {
-        const error = await printifyResponse.text();
-        console.error("❌ Printify API error:", printifyResponse.status, error);
-      }
-    } catch (error) {
-      console.error("❌ Failed to create Printify order:", error);
-    }
+    // Order is confirmed - customer will see confirmation on success page
+    console.log("🎉 Order confirmed! Customer will receive confirmation email from Stripe.");
   }
 
   res.json({ received: true });
