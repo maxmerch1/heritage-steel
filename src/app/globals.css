@@ -1,26 +1,106 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #FAF9F6;
+  --foreground: #0A1A2F;
+  --navy: #0A1A2F;
+  --crimson: #C1121F;
+  --off-white: #FAF9F6;
+  --steel: #B0B7C3;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-merriweather);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), sans-serif;
+}
+
+/* Patriotic background textures */
+.patriotic-bg {
+  background-image: 
+    linear-gradient(45deg, transparent 25%, rgba(192, 18, 31, 0.02) 25%, rgba(192, 18, 31, 0.02) 50%, transparent 50%, transparent 75%, rgba(192, 18, 31, 0.02) 75%),
+    linear-gradient(45deg, transparent 25%, rgba(10, 26, 47, 0.02) 25%, rgba(10, 26, 47, 0.02) 50%, transparent 50%, transparent 75%, rgba(10, 26, 47, 0.02) 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+}
+
+.flag-stripe {
+  background: linear-gradient(90deg, #C1121F 0%, #C1121F 33%, #FAF9F6 33%, #FAF9F6 66%, #0A1A2F 66%, #0A1A2F 100%);
+  height: 4px;
+}
+
+.font-serif {
+  font-family: var(--font-merriweather), serif;
+}
+
+.font-sans {
+  font-family: var(--font-inter), sans-serif;
+}
+
+/* Conversion optimization styles */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(178, 34, 52, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(178, 34, 52, 0.6);
+  }
+}
+
+@keyframes shine {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.btn-primary {
+  background: linear-gradient(45deg, #B22234, #DC2626);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.5s;
+}
+
+.btn-primary:hover::before {
+  left: 100%;
+}
+
+.btn-primary:hover {
+  animation: pulse-glow 2s infinite;
+  transform: scale(1.05);
+}
+
+/* Sticky CTA animations */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.sticky-cta {
+  animation: slideUp 0.3s ease-out;
 }
